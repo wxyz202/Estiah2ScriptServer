@@ -29,8 +29,8 @@ http.createServer(function (req, res) {
         global.framework = framework;
         framework.init(req, res);
         fs.readdirSync(global.projectHome + "/handler").forEach(function(module){
-            framework.register(module);
-        }
+            framework.register(global.projectHome + "/handler/" + module);
+        });
         framework.run();
     } catch (err) {
         logger.error(err.stack);

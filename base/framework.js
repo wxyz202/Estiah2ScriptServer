@@ -4,6 +4,8 @@ Environment = function(req, res){
     this.req = req;
     this.res = res;
     this.routes = [];
+    this.path = url.parse(req.url).pathname;
+    this.method = req.method;
 }
 
 var env;
@@ -32,7 +34,7 @@ function run(){
             env.res.end(route.handler());
             finished = true;
         }
-    };
+    });
     if (!finished) {
         env.res.writeHead(404, {'Content-Type': 'text/html'}); 
         env.res.end("Not Found");
