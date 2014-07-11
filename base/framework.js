@@ -1,47 +1,62 @@
 var url = require("url");
+var http = require('http');
 
-Environment = function(req, res){
-    this.req = req;
-    this.res = res;
-    this.routes = [];
-    this.path = url.parse(req.url).pathname;
-    this.method = req.method;
-}
+Application = function(){
+    var self = this;
 
-var env;
+    self.start = function(socket, callback){
+        http.createServer(function (req, res) {
+            try {
+                self.init(req, res);
+                self.run();
+            } catch (err) {
+                res.writeHead(500);
+                res.end();
+                self.logger.error(err.stack);
+            }
+        }).listen(socket, callback);
+    };
 
-function route(path, method, handler) {
-    env.routes.push({
-        "path": path,
-        "method": method,
-        "handler": handler
-    });
-}
+    self.routes = [];
+    self.register = function(handler){
+        var handler = require(handler);
+        handler.registerToApp(self);
+    };
+    self.route = function(path, method, handler){
+        self.routes.push({
+            "path": path,
+            "method": method,
+            "handler": handler
+        });
+    };
 
-function register(module){
-    require(module);
-}
-
-function init(req, res) {
-    env = new Environment(req, res);
-}
-
-function run(){
-    var finished = false;
-    env.routes.forEach(function(route){
-        if (route.path == env.path && route.method.toLowerCase() == env.method.toLowerCase()) {
-            env.res.writeHead(200, {'Content-Type': 'text/html'}); 
-            env.res.end(route.handler());
-            finished = true;
+    self.init = function(req, res){
+        self.req = req;
+        self.res = res;
+        self.path = url.parse(req.url).pathname;
+        self.method = req.method;
+        self.header = {};
+    };
+    self.setHeader = function(k, v){
+        self.header[k] = v;
+    };
+    self.run = function(){
+        var finished = false;
+        var output;
+        self.routes.forEach(function(route){
+            if (route.path == self.path && route.method.toLowerCase() == self.method.toLowerCase()) {
+                output = route.handler();
+                finished = true;
+            }
+        });
+        if (finished) {
+            self.res.writeHead(200, self.header);
+            self.res.end(output);
+        } else {
+            self.res.writeHead(404, {'Content-Type': 'text/html'}); 
+            self.res.end("Not Found");
         }
-    });
-    if (!finished) {
-        env.res.writeHead(404, {'Content-Type': 'text/html'}); 
-        env.res.end("Not Found");
-    }
-}
+    };
+};
 
-exports.register = register;
-exports.init = init;
-exports.run = run;
-exports.route = route;
+exports.Application = Application;

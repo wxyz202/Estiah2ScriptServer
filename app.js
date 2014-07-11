@@ -1,43 +1,40 @@
 var fs = require('fs');
-var http = require('http');
 
 var socketFile = "/tmp/nodejs-estiah2.sock";
 
 global.projectHome = __dirname;
-global.logger = {
-    "format": function(f, s){
-        fs.writeFileSync(f, "[" + (new Date()).toString() + "] " + s + "\n", {flag:"a"});
+var logger = {
+    "format": function(f, s, t){
+        fs.writeFileSync(f, "[" + t + "][" + (new Date()).toString() + "] " + s + "\n", {flag:"a"});
     },
     "log": function(s){
-        this.format(global.projectHome + "/logs/debug.log", s);
+        this.format(global.projectHome + "/logs/debug.log", s, "log");
+    },
+    "debug": function(s){
+        this.format(global.projectHome + "/logs/debug.log", s, "debug");
     },
     "error": function(s){
-        this.format(global.projectHome + "/logs/nodejs.log", s);
+        this.format(global.projectHome + "/logs/nodejs.log", s, "error");
     }
 };
-
-var logger = global.logger;
-
 
 process.on('uncaughtException', function(err) {
     logger.error(err.stack);
 });
 
-http.createServer(function (req, res) {
-    try {
-        var framework = require(global.projectHome + "/base/framework.js");
-        global.framework = framework;
-        framework.init(req, res);
-        fs.readdirSync(global.projectHome + "/handler").forEach(function(module){
-            framework.register(global.projectHome + "/handler/" + module);
-        });
-        framework.run();
-    } catch (err) {
-        logger.error(err.stack);
-        res.writeHead(500);
-        res.end();
+var framework = require(global.projectHome + "/base/framework.js");
+
+app = new framework.Application();
+
+app.logger = logger;
+
+fs.readdirSync(global.projectHome + "/handler").forEach(function(handler){
+    if (/.*\.js$/.test(handler)){
+        app.register(global.projectHome + "/handler/" + handler);
     }
-}).listen(socketFile, function() {
+});
+
+app.start(socketFile, function(){
     process.on('SIGTERM', function() {
         fs.unlinkSync(socketFile);
         process.exit();
