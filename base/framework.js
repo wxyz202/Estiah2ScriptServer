@@ -12,7 +12,7 @@ Application = function(){
             } catch (err) {
                 res.writeHead(500);
                 res.end();
-                self.logger.error(err.stack);
+                throw err;
             }
         }).listen(socket, callback);
     };
@@ -28,6 +28,24 @@ Application = function(){
             "method": method,
             "handler": handler
         });
+    };
+    self.loadConfig = function(config){
+        if (config.log){
+            self.getLogger = function(log) {
+                var logFile = global.projectHome + "/" + config.log[log];
+                var logger = {
+                    "log": function(s){
+                        fs.writeFileSync(logFile, "[" + log + "][" + (new Date()).toString() + "] " + s + "\n", {flag:"a"});
+                    }
+                };
+                return logger;
+            };
+        }
+        if (config.db){
+            self.db = require(global.projectHome + "/base/mysql.js").connect(config.db);
+        }
+        if (config.redis){
+        }
     };
 
     self.init = function(req, res){
