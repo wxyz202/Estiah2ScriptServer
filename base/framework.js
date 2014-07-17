@@ -1,5 +1,27 @@
+var fs = require('fs');
 var url = require("url");
 var http = require('http');
+
+var jsonValidator = require("amanda")("json");
+
+
+var JsonResponse = function(msg, data){
+    var res = {
+        "success": true,
+        "msg": msg
+    };
+    if (data) {
+        res.data = data;
+    }
+    return JSON.stringify(res);
+};
+var JsonErrorResponse = function(msg){
+    return JSON.stringify({
+        "success": false,
+        "msg": msg
+    });
+};
+
 
 Application = function(){
     var self = this;
@@ -8,7 +30,13 @@ Application = function(){
         http.createServer(function (req, res) {
             try {
                 self.init(req, res);
-                self.run();
+                if (req.method.toLowerCase() == "post") {
+                    req.on("end", function(){
+                        self.run();
+                    });
+                } else {
+                    self.run();
+                }
             } catch (err) {
                 res.writeHead(500);
                 res.end();
@@ -47,16 +75,35 @@ Application = function(){
         if (config.redis){
         }
     };
+    self.validateJsonBody = function(schema, callback){
+        var data;
+        try {
+            data = JSON.parse(app.body);
+        } catch(err) {
+            return JsonErrorResponse("format wrong");
+        }
+
+        var ret;
+        jsonValidator.validate(data, schema, function(err){
+            if (err) {
+                ret = JsonErrorResponse(err.getMessages());
+            } else {
+                ret = callback(data);
+            }
+        });
+        return ret;
+    };
 
     self.init = function(req, res){
         self.req = req;
         self.res = res;
         self.path = url.parse(req.url).pathname;
         self.method = req.method;
-        if (self.method.toLowerCase() == "get") {
-            self.body = "";
-        } else {
-            self.body = req.read();
+        self.body = "";
+        if (self.method.toLowerCase() == "post") {
+            req.on("data", function(data){
+                self.body += data;
+            });
         }
         self.header = {};
     };
@@ -82,4 +129,6 @@ Application = function(){
     };
 };
 
+exports.JsonResponse = JsonResponse;
+exports.JsonErrorResponse = JsonErrorResponse;
 exports.Application = Application;
