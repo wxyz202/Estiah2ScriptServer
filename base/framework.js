@@ -53,6 +53,11 @@ Application = function(){
         self.res = res;
         self.path = url.parse(req.url).pathname;
         self.method = req.method;
+        if (self.method.toLowerCase() == "get") {
+            self.body = "";
+        } else {
+            self.body = req.read();
+        }
         self.header = {};
     };
     self.setHeader = function(k, v){
