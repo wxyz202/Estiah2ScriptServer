@@ -5,9 +5,9 @@ exports.config = {
     },
     "db": {
         "host": "localhost",
-        "db": "estiah2",
-        "user": "estiah2",
-        "password": "estiah2"
+        "db": "estiah",
+        "user": "estiah",
+        "password": "estiah"
     },
     "log": {
         "error": "logs/nodejs.log",

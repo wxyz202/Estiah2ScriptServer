@@ -35,7 +35,7 @@ Application = function(){
                 var logFile = global.projectHome + "/" + config.log[log];
                 var logger = {
                     "log": function(s){
-                        fs.writeFileSync(logFile, "[" + log + "][" + (new Date()).toString() + "] " + s + "\n", {flag:"a"});
+                        fs.appendFileSync(logFile, "[" + log + "][" + (new Date()).toString() + "] " + s + "\n");
                     }
                 };
                 return logger;

@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var socketFile = "/tmp/nodejs-estiah2.sock";
+var socketFile = "/tmp/nodejs-estiah.sock";
 
 global.projectHome = __dirname;
 
