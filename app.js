@@ -5,7 +5,7 @@ var socketFile = "/tmp/nodejs-estiah2.sock";
 global.projectHome = __dirname;
 
 process.on('uncaughtException', function(err) {
-    fs.writeFileSync(global.projectHome + "/logs/nodejs.log", "[error][" + (new Date()).toString() + "] " + err.stack + "\n", {flag:"a"});
+    fs.appendFileSync(global.projectHome + "/logs/nodejs.log", "[error][" + (new Date()).toString() + "] " + err.stack + "\n");
 });
 
 
