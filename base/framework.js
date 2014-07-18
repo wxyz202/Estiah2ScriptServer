@@ -73,6 +73,7 @@ Application = function(){
             self.db = require(global.projectHome + "/base/mysql.js").connect(config.db);
         }
         if (config.redis){
+            self.redis = require(global.projectHome + "/base/redis.js").connect(config.redis);
         }
     };
     self.validateJsonBody = function(schema, callback){
@@ -80,18 +81,17 @@ Application = function(){
         try {
             data = JSON.parse(app.body);
         } catch(err) {
-            return JsonErrorResponse("format wrong");
+            self.respond(JsonErrorResponse("format wrong"));
+            return;
         }
 
-        var ret;
         jsonValidator.validate(data, schema, function(err){
             if (err) {
-                ret = JsonErrorResponse(err.getMessages());
+                self.respond(JsonErrorResponse(err.getMessages()));
             } else {
-                ret = callback(data);
+                callback(data);
             }
         });
-        return ret;
     };
 
     self.init = function(req, res){
@@ -110,18 +110,23 @@ Application = function(){
     self.setHeader = function(k, v){
         self.header[k] = v;
     };
+    self.respond = function(resp, code) {
+        if (code === undefined) {
+            code = 200;
+        }
+        self.res.writeHead(code, self.header);
+        self.res.end(resp);
+    };
     self.run = function(){
         var finished = false;
-        var output;
         self.routes.forEach(function(route){
             if (route.path == self.path && route.method.toLowerCase() == self.method.toLowerCase()) {
-                output = route.handler();
+                route.handler();
                 finished = true;
             }
         });
         if (finished) {
             self.res.writeHead(200, self.header);
-            self.res.end(output);
         } else {
             self.res.writeHead(404, {'Content-Type': 'text/html'}); 
             self.res.end("Not Found");

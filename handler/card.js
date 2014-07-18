@@ -1,3 +1,5 @@
+var crypto = require("crypto");
+
 var cts = require(global.projectHome + "/base/constants.js");
 var framework = require(global.projectHome + "/base/framework.js");
 var JsonResponse = framework.JsonResponse;
@@ -5,14 +7,13 @@ var JsonErrorResponse = framework.JsonErrorResponse;
 
 exports.registerToApp = function(app){
     app.route("/card", "get", function(){
-        app.db.use(function(db){
-        });
-        return "Hello World!"
+        app.respond("Hello World!");
     });
 
     app.route("/deck", "post", function(){
-        return app.validateJsonBody({
+        app.validateJsonBody({
             type: "object",
+            additionalProperties: false,
             properties: {
                 cards: {
                     required: true,
@@ -58,7 +59,30 @@ exports.registerToApp = function(app){
                 });
             });
 
-            return JsonResponse("import success", data);
+            app.redis.use(function(redis){
+                var md5 = crypto.createHash("md5");
+                md5.update(app.body);
+                var orikey = md5.digest("hex");
+                var key = orikey;
+                var value = app.body;
+                var ex = 60 * 60 * 24;
+                var insertFunc = function(i){
+                    if (i>100) throw new Error("haha");
+                    app.getLogger("debug").log(i);
+                    redis.exists(key, function(err, resp){
+                        if (resp == 0) {
+                            redis.setex(key, ex, value);
+                            app.respond(JsonResponse("import success", {"token":key}));
+                            redis.quit();
+                        } else {
+                            key = orikey + i;
+                            insertFunc(i+1);
+                        }
+                    });
+                };
+                insertFunc(0);
+            });
+
         });
     });
 };
