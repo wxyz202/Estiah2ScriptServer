@@ -18,16 +18,25 @@ exports.registerToApp = function(app){
                     required: true,
                     type: "array",
                     items: {
-                        type: "string",
-                        pattern: /^[0-9]+$/
+                        type: "object",
+                        properties: {
+                            id: {
+                                required: true,
+                                type: "integer"
+                            },
+                            num: {
+                                required: true,
+                                type: "integer",
+                                maximum: 4
+                            }
+                        }
                     }
                 },
                 scards: {
                     required: true,
                     type: "array",
                     items: {
-                        type: "string",
-                        pattern: /^[0-9]+$/
+                        type: "integer"
                     }
                 }
             }
@@ -42,10 +51,10 @@ exports.registerToApp = function(app){
 
             app.db.use(function(db){
                 data.cards.forEach(function(card){
-                    addCardToDb(db, parseInt(card), cts.CARD_TYPE.CARD);
+                    addCardToDb(db, card.id, cts.CARD_TYPE.CARD);
                 });
                 data.scards.forEach(function(scard){
-                    addCardToDb(db, parseInt(scard), cts.CARD_TYPE.SCARD);
+                    addCardToDb(db, scard, cts.CARD_TYPE.SCARD);
                 });
             });
 
