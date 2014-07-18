@@ -67,8 +67,6 @@ exports.registerToApp = function(app){
                 var value = app.body;
                 var ex = 60 * 60 * 24;
                 var insertFunc = function(i){
-                    if (i>100) throw new Error("haha");
-                    app.getLogger("debug").log(i);
                     redis.exists(key, function(err, resp){
                         if (resp == 0) {
                             redis.setex(key, ex, value);
