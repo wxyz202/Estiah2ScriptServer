@@ -13,13 +13,19 @@ var JsonResponse = function(msg, data){
     if (data) {
         res.data = data;
     }
-    return JSON.stringify(res);
+    return {
+        "header": {'Content-Type': 'application/json'},
+        "body": JSON.stringify(res)
+    };
 };
 var JsonErrorResponse = function(msg){
-    return JSON.stringify({
-        "success": false,
-        "msg": msg
-    });
+    return {
+        "header": {'Content-Type': 'application/json'},
+        "body": JSON.stringify({
+            "success": false,
+            "msg": msg
+        })
+    };
 };
 
 
@@ -114,8 +120,18 @@ Application = function(){
         if (code === undefined) {
             code = 200;
         }
+
+        var body;
+        if (typeof resp === "string") {
+            body = resp;
+        } else {
+            for (var k in resp.header){
+                self.setHeader(k, resp.header[k]);
+            }
+            body = resp.body;
+        }
         self.res.writeHead(code, self.header);
-        self.res.end(resp);
+        self.res.end(body);
     };
     self.run = function(){
         var finished = false;
@@ -125,9 +141,7 @@ Application = function(){
                 finished = true;
             }
         });
-        if (finished) {
-            self.res.writeHead(200, self.header);
-        } else {
+        if (!finished) {
             self.res.writeHead(404, {'Content-Type': 'text/html'}); 
             self.res.end("Not Found");
         }
