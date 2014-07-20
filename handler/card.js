@@ -2,6 +2,7 @@ var crypto = require("crypto");
 
 var cts = require(global.projectHome + "/base/constants.js");
 var framework = require(global.projectHome + "/base/framework.js");
+var TemplateResponse = framework.TemplateResponse;
 var JsonResponse = framework.JsonResponse;
 var JsonErrorResponse = framework.JsonErrorResponse;
 
@@ -80,7 +81,48 @@ exports.registerToApp = function(app){
                 };
                 insertFunc(0);
             });
+        });
+    });
 
+    app.route("/deck", "get", function(){
+        app.validateQuery({
+            type: "object",
+            properties: {
+                token: {
+                    required: true,
+                    type: "string"
+                }
+            }
+        }, function(data){
+            app.redis.use(function(redis){
+                redis.get(data.token, function(err, resp){
+                    if (resp) {
+                        var deck = JSON.parse(resp);
+                        var allCardIds = deck.scards.slice(0);
+                        deck.cards.forEach(function(card){
+                            allCardIds.push(card.id);
+                        });
+                        app.db.use(function(db){
+                            var sql = "SELECT id, name FROM card WHERE id IN (" + allCardIds.join(",") + ")";
+                            db.query(sql, function(err, result){
+                                if (err) { throw err };
+                                var cardInfo = {};
+                                result.forEach(function(record){
+                                    cardInfo[record.id] = record.name;
+                                });
+                                app.respond(TemplateResponse("deck.jade", {
+                                    deck: deck,
+                                    cardInfo: cardInfo
+                                }));
+                            });
+                        });
+                    } else {
+                        app.respond("not found", 404);
+                    }
+                });
+            });
+        }, function(err){
+            app.respond("not found", 404);
         });
     });
 };

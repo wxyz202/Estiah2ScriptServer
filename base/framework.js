@@ -2,8 +2,20 @@ var fs = require('fs');
 var url = require("url");
 var http = require('http');
 
+var jade = require("jade");
 var jsonValidator = require("amanda")("json");
 
+
+var TemplateResponse = function(templateFile, data){
+    templateFile = global.projectHome + "/template/" + templateFile;
+    var template = fs.readFileSync(templateFile);
+    var fn = jade.compile(template);
+    var html = fn(data);
+    return {
+        "header": {'Content-Type': 'text/html'},
+        "body": html
+    };
+};
 
 var JsonResponse = function(msg, data){
     var res = {
@@ -82,18 +94,40 @@ Application = function(){
             self.redis = require(global.projectHome + "/base/redis.js").connect(config.redis);
         }
     };
-    self.validateJsonBody = function(schema, callback){
+    self.validateQuery = function(schema, callback, errorHandler){
+        var data = self.query;
+        jsonValidator.validate(data, schema, function(err){
+            if (err) {
+                if (errorHandler) {
+                    errorHandler(err)
+                } else {
+                    self.respond(JsonErrorResponse(err.getMessages()));
+                }
+            } else {
+                callback(data);
+            }
+        });
+    };
+    self.validateJsonBody = function(schema, callback, errorHandler){
         var data;
         try {
             data = JSON.parse(app.body);
         } catch(err) {
-            self.respond(JsonErrorResponse("format wrong"));
+            if (errorHandler){
+                errorHandler(err);
+            } else {
+                self.respond(JsonErrorResponse("format wrong"));
+            }
             return;
         }
 
         jsonValidator.validate(data, schema, function(err){
             if (err) {
-                self.respond(JsonErrorResponse(err.getMessages()));
+                if (errorHandler){
+                    errorHandler(err);
+                } else {
+                    self.respond(JsonErrorResponse(err.getMessages()));
+                }
             } else {
                 callback(data);
             }
@@ -103,7 +137,9 @@ Application = function(){
     self.init = function(req, res){
         self.req = req;
         self.res = res;
-        self.path = url.parse(req.url).pathname;
+        var parsedUrl = url.parse(req.url, true)
+        self.path = parsedUrl.pathname;
+        self.query = parsedUrl.query;
         self.method = req.method;
         self.body = "";
         if (self.method.toLowerCase() == "post") {
@@ -148,6 +184,7 @@ Application = function(){
     };
 };
 
+exports.TemplateResponse = TemplateResponse;
 exports.JsonResponse = JsonResponse;
 exports.JsonErrorResponse = JsonErrorResponse;
 exports.Application = Application;
