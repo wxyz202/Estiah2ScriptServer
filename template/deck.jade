@@ -1,6 +1,7 @@
 doctype html
 html
     head
+        script(type="text/javascript", src="http://code.jquery.com/jquery-1.11.0.min.js")
         style.
             table {
                 border-collapse: collapse;
@@ -18,11 +19,18 @@ html
             each card in deck.cards
                 tr
                     td= card.id
-                    td= cardInfo[card.id]
+                    td.cardblock= cardInfo[card.id]
                     td= card.num
         
             each scard in deck.scards
                 tr
                     td= scard
-                    td= cardInfo[scard]
+                    td.cardblock= cardInfo[scard]
                     td= "资源"
+
+        script(type="text/javascript").
+            $(".cardblock").hover(function(){
+                $(this).css("color", "red");
+            },function(){
+                $(this).css("color", "black");
+            })

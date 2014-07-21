@@ -9,7 +9,7 @@ var jsonValidator = require("amanda")("json");
 var TemplateResponse = function(templateFile, data){
     templateFile = global.projectHome + "/template/" + templateFile;
     var template = fs.readFileSync(templateFile);
-    var fn = jade.compile(template);
+    var fn = jade.compile(template, {pretty:true});
     var html = fn(data);
     return {
         "header": {'Content-Type': 'text/html'},
