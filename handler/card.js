@@ -68,14 +68,20 @@ exports.registerToApp = function(app){
                 var value = app.body;
                 var ex = 60 * 60 * 24;
                 var insertFunc = function(i){
-                    redis.exists(key, function(err, resp){
-                        if (resp == 0) {
+                    redis.get(key, function(err, resp){
+                        if (resp) {
+                            if (resp == value) {
+                                redis.expire(key, ex);
+                                app.respond(JsonResponse("import success", {"token":key}));
+                                redis.quit();
+                            } else {
+                                key = orikey + i;
+                                insertFunc(i+1);
+                            }
+                        } else {
                             redis.setex(key, ex, value);
                             app.respond(JsonResponse("import success", {"token":key}));
                             redis.quit();
-                        } else {
-                            key = orikey + i;
-                            insertFunc(i+1);
                         }
                     });
                 };
