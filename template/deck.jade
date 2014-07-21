@@ -1,36 +1,33 @@
 doctype html
 html
     head
+        link(href="/static/popcardinfo.css", rel="stylesheet")
         script(type="text/javascript", src="http://code.jquery.com/jquery-1.11.0.min.js")
-        style.
-            table {
-                border-collapse: collapse;
-            }
-            table td {
-                border: 1px solid black;
-            }
+        script(type="text/javascript", src="/static/popcardinfo.js")
     body
-        table
-            tr
-                td id
-                td 名称
-                td 数量
-        
-            each card in deck.cards
-                tr
-                    td= card.id
-                    td.cardblock= cardInfo[card.id]
-                    td= card.num
-        
-            each scard in deck.scards
-                tr
-                    td= scard
-                    td.cardblock= cardInfo[scard]
-                    td= "资源"
+        div.cardcontent
+            div.cchead
+                div.cardsep.cardid
+                    span="id"
+                div.cardsep.cardname.lb
+                    span="名称"
+                div.cardsep.cardcount.lb
+                    span="数量"
 
-        script(type="text/javascript").
-            $(".cardblock").hover(function(){
-                $(this).css("color", "red");
-            },function(){
-                $(this).css("color", "black");
-            })
+            each card in deck.cards
+                div.cardinfo
+                    div.cardsep.cardid
+                        span=card.id
+                    div.cardsep.cardname.lb
+                        span=cardInfo[card.id]
+                    div.cardsep.cardnum.lb
+                        span=card.num
+
+            each scard in deck.scards
+                div.cardinfo
+                    div.cardsep.cardid
+                        span=scard
+                    div.cardsep.cardname.lb
+                        span=cardInfo[scard]
+                    div.cardsep.cardnum.lb
+                        span="资源"

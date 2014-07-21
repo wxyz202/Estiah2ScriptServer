@@ -3,8 +3,8 @@ var exec = require('child_process').exec;
 
 
 var FILE_LIST = ["app.js"];
-var DIR_LIST = ["base", "etc", "handler", "template"];
-var VALID_FILE = [/^.*.js$/, /^.*.jade$/];
+var DIR_LIST = ["base", "etc", "handler", "template", "static"];
+var VALID_FILE = [/^.*\.js$/, /^.*\.jade$/, /^.*\.css/];
 
 
 var printHelpMsg = function(){
