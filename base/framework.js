@@ -57,7 +57,11 @@ Application = function(){
                 }
             } catch (err) {
                 res.writeHead(500);
-                res.end();
+                if (self.debug){
+                    res.end(err.stack);
+                } else {
+                    res.end();
+                }
                 throw err;
             }
         }).listen(socket, callback);
@@ -76,6 +80,11 @@ Application = function(){
         });
     };
     self.loadConfig = function(config){
+        if (config.debug){
+            self.debug = config.debug
+        } else {
+            self.debug = false;
+        }
         if (config.log){
             self.getLogger = function(log) {
                 var logFile = global.projectHome + "/" + config.log[log];

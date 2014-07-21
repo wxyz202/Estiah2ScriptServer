@@ -1,4 +1,6 @@
 exports.config = {
+    "debug": true,
+
     "redis": {
         "host": "localhost",
         "port": 6379
