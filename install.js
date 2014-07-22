@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 
 var FILE_LIST = ["app.js"];
-var DIR_LIST = ["base", "etc", "handler", "template", "static"];
+var DIR_LIST = ["base", "etc", "handler", "template", "static", "tools"];
 var VALID_FILE = [/^.*\.js$/, /^.*\.jade$/, /^.*\.css/];
 
 
