@@ -67,12 +67,18 @@ exports.registerToApp = function(app){
                 var key = orikey;
                 var value = app.body;
                 var ex = 60 * 60 * 24;
+                var responseFunc = function(token){
+                    return JsonResponse("import success", {
+                        "token":token,
+                        "expireTimestamp": Date.now() + ex * 1000
+                    });
+                };
                 var insertFunc = function(i){
                     redis.get(key, function(err, resp){
                         if (resp) {
                             if (resp == value) {
                                 redis.expire(key, ex);
-                                app.respond(JsonResponse("import success", {"token":key}));
+                                app.respond(responseFunc(key));
                                 redis.quit();
                             } else {
                                 key = orikey + i;
@@ -80,7 +86,7 @@ exports.registerToApp = function(app){
                             }
                         } else {
                             redis.setex(key, ex, value);
-                            app.respond(JsonResponse("import success", {"token":key}));
+                            app.respond(responseFunc(key));
                             redis.quit();
                         }
                     });
