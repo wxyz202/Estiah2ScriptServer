@@ -58,19 +58,34 @@ var getCardsInfo = function(db, cardIdList, callback){
 
 var main = function(callback){
     app.db.use(function(db){
-        var now = utils.formatDateToMysql(new Date());
-        var sql = "SELECT id FROM card WHERE status = 0 OR (expire_time IS NOT NULL AND expire_time <= ?)";
-        var params = [now];
-        db.query(sql, params, function(err, result){
-            if(err){ throw err; }
-            if (result.length > 0){
-                var cardIdList = [];
-                result.forEach(function(record){
-                    cardIdList.push(record.id);
-                });
-                getCardsInfo(db, cardIdList, callback);
+        var endFromdb = function(){
+            db.release();
+            callback();
+        };
+        db.lockStr("tools/getcard.js", function(locked, releaseCallback){
+            if (!locked){
+                endFromdb();
             } else {
-                callback();
+                var endFromLockStr= function(){
+                    releaseCallback();
+                    endFromdb();
+                };
+
+                var now = utils.formatDateToMysql(new Date());
+                var sql = "SELECT id FROM card WHERE status = 0 OR (expire_time IS NOT NULL AND expire_time <= ?)";
+                var params = [now];
+                db.query(sql, params, function(err, result){
+                    if(err){ throw err; }
+                    if (result.length > 0){
+                        var cardIdList = [];
+                        result.forEach(function(record){
+                            cardIdList.push(record.id);
+                        });
+                        getCardsInfo(db, cardIdList, endFromLockStr);
+                    } else {
+                        endFromLockStr();
+                    }
+                });
             }
         });
     });
