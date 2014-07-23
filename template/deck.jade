@@ -20,7 +20,10 @@ html
                     div.cardsep.cardid
                         span=card.id
                     div.cardsep.cardname.lb
-                        span=cardInfo[card.id]
+                        if cardInfo[card.id].status == 0
+                            span="<抓取中，请稍候再试>"
+                        else
+                            span=cardInfo[card.id].name
                     div.cardsep.cardnum.lb
                         span=card.num
 
@@ -29,6 +32,13 @@ html
                     div.cardsep.cardid
                         span=scard
                     div.cardsep.cardname.lb
-                        span=cardInfo[scard]
+                        if cardInfo[scard].status == 0
+                            span="<抓取中，请稍候再试>"
+                        else
+                            span=cardInfo[scard].name
                     div.cardsep.cardnum.lb
                         span="资源"
+
+
+        script(type="text/javascript").
+            var cardInfo = !{ JSON.stringify(cardInfo).replace(/<\//g, "<\\/") };

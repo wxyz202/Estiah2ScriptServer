@@ -115,12 +115,16 @@ exports.registerToApp = function(app){
                             allCardIds.push(card.id);
                         });
                         app.db.use(function(db){
-                            var sql = "SELECT id, name FROM card WHERE id IN (" + allCardIds.join(",") + ")";
+                            var sql = "SELECT id, status, name, fx FROM card WHERE id IN (" + allCardIds.join(",") + ")";
                             db.query(sql, function(err, result){
                                 if (err) { throw err };
                                 var cardInfo = {};
                                 result.forEach(function(record){
-                                    cardInfo[record.id] = record.name;
+                                    cardInfo[record.id] = {
+                                        "name": record.name,
+                                        "fx": record.fx,
+                                        "status": record.status
+                                    };
                                 });
                                 app.respond(TemplateResponse("deck.jade", {
                                     deck: deck,
