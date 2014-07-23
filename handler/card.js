@@ -1,4 +1,5 @@
 var crypto = require("crypto");
+var child_process = require("child_process");
 
 var cts = require(global.projectHome + "/base/constants.js");
 var framework = require(global.projectHome + "/base/framework.js");
@@ -43,21 +44,48 @@ exports.registerToApp = function(app){
                 }
             }
         }, function(data) {
-            var addCardToDb = function(db, cardId, cardType) {
+            var hasInserted = false;
+
+            var addCardToDb = function(db, cardId, cardType, callback) {
                 var sql = "INSERT IGNORE INTO card (id, type) VALUES (?, ?)";
                 var params = [cardId, cardType];
                 db.query(sql, params, function(err, result){
                     if(err){ throw err; }
+                    if (result.affectedRows > 0) {
+                        hasInserted = true;
+                    }
+                    callback();
                 });
             };
 
             app.db.use(function(db){
+                var cards = [];
                 data.cards.forEach(function(card){
-                    addCardToDb(db, card.id, cts.CARD_TYPE.CARD);
+                    cards.push({
+                        "id": card.id,
+                        "type": cts.CARD_TYPE.CARD
+                    });
                 });
                 data.scards.forEach(function(scard){
-                    addCardToDb(db, scard, cts.CARD_TYPE.SCARD);
+                    cards.push({
+                        "id": scard,
+                        "type": cts.CARD_TYPE.SCARD
+                    });
                 });
+                var f = function(currentIndex){
+                    if (currentIndex > 0){
+                        currentIndex--;
+                        addCardToDb(db, cards[currentIndex].id, cards[currentIndex].type, function(){
+                            f(currentIndex);
+                        });
+                    } else {
+                        db.release();
+                        if (hasInserted){
+                            child_process.exec("/usr/local/bin/node /home/estiah/ScriptServer/tools/getcard.js");
+                        }
+                    }
+                };
+                f(cards.length);
             });
 
             app.redis.use(function(redis){
@@ -118,6 +146,8 @@ exports.registerToApp = function(app){
                             var sql = "SELECT id, status, name, fx FROM card WHERE id IN (" + allCardIds.join(",") + ")";
                             db.query(sql, function(err, result){
                                 if (err) { throw err };
+                                db.release();
+
                                 var cardInfo = {};
                                 result.forEach(function(record){
                                     cardInfo[record.id] = {
