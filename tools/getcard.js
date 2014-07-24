@@ -42,18 +42,12 @@ var getCardInfo = function(db, cardId, callback){
 
 var getCardsInfo = function(db, cardIdList, callback){
     console.dir(cardIdList);
-    var currentIndex = cardIdList.length - 1;
-    var f = function(){
-        getCardInfo(db, cardIdList[currentIndex], function(){
-            if (currentIndex > 0){
-                currentIndex--;
-                f();
-            } else {
-                callback();
-            }
-        });
-    };
-    f();
+    var serial = new utils.ArrayCallbackFunction(cardIdList, function(cardId){
+        getCardInfo(db, cardId, this.callback);
+    }, function(){
+        callback();
+    });
+    serial.run();
 };
 
 var main = function(callback){
