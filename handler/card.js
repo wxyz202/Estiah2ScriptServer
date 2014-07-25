@@ -94,7 +94,7 @@ exports.registerToApp = function(app){
                 var orikey = md5.digest("hex");
                 var key = orikey;
                 var value = app.body;
-                var ex = 60 * 60 * 24;
+                var ex = 60 * 60 * 24 * 2;
                 var responseFunc = function(token){
                     return JsonResponse("import success", {
                         "token":token,
