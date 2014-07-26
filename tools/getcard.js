@@ -28,9 +28,10 @@ var getCardInfo = function(db, cardId, callback){
         var card = JSON.parse(body).data.card;
         var name = card.name;
         var fx = card.fx;
+        var rarity = card.rarity.id;
         var expire_time = utils.formatDateToMysql(new Date(Date.now() + utils.randint(1000 * 60 * 60 * 24 * 6, 1000 * 60 * 60 * 24 * 8)));
-        var sql = "UPDATE card SET status = 1, expire_time = ?, content = ?, name = ?, fx = ? where id = ?";
-        var params = [expire_time, body, name, fx, cardId];
+        var sql = "UPDATE card SET status = 1, expire_time = ?, content = ?, name = ?, fx = ?, rarity = ? where id = ?";
+        var params = [expire_time, body, name, fx, rarity, cardId];
         db.query(sql, params, function(err, result){
             if (err) { throw err; }
             setTimeout(function(){

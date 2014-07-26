@@ -5,8 +5,11 @@ var http = require('http');
 var jade = require("jade");
 var jsonValidator = require("amanda")("json");
 
+var cts = require(global.projectHome + "/base/constants.js");
+
 
 var TemplateResponse = function(templateFile, data){
+    data.cts = cts;
     templateFile = global.projectHome + "/template/" + templateFile;
     var template = fs.readFileSync(templateFile);
     var fn = jade.compile(template, {pretty:true});

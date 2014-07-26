@@ -3,42 +3,44 @@ html
     head
         meta(charset="utf-8")
         link(href="/static/popcardinfo.css", rel="stylesheet")
-        script(type="text/javascript", src="http://code.jquery.com/jquery-1.11.0.min.js")
+        script(type="text/javascript", src="/static/jquery-1.11.0.min.js")
         script(type="text/javascript", src="/static/popcardinfo.js")
     body
         div.cardcontent
             div.cchead
                 div.cardsep.cardid
                     span="id"
-                div.cardsep.cardname.lb
-                    span="名称"
                 div.cardsep.cardcount.lb
                     span="数量"
+                div.cardsep.cardname.lb
+                    span="名称"
 
             each card in deck.cards
-                div.cardinfo
+                - var cardInfo = cardInfos[card.id];
+                div.cardinfo(data-id=cardInfo.id, class=(cardInfo.status == 0 ? "" : cts.RARITY.NAME[cardInfo.rarity]))
                     div.cardsep.cardid
-                        span=card.id
-                    div.cardsep.cardname.lb
-                        if cardInfo[card.id].status == 0
-                            span="<抓取中，请稍候再试>"
-                        else
-                            span=cardInfo[card.id].name
-                    div.cardsep.cardnum.lb
+                        span=cardInfo.id
+                    div.cardsep.cardcount.lb
                         span=card.num
+                    div.cardsep.cardname.lb
+                        if cardInfo.status == 0
+                            span="<抓取中，请稍候>"
+                        else
+                            span=cardInfo.name
 
             each scard in deck.scards
-                div.cardinfo
+                - var scardInfo = cardInfos[scard];
+                div.cardinfo(data-id=scardInfo.id, class=(scardInfo.status == 0 ? "" : cts.RARITY.NAME[scardInfo.rarity]))
                     div.cardsep.cardid
-                        span=scard
-                    div.cardsep.cardname.lb
-                        if cardInfo[scard].status == 0
-                            span="<抓取中，请稍候再试>"
-                        else
-                            span=cardInfo[scard].name
-                    div.cardsep.cardnum.lb
+                        span=scardInfo.id
+                    div.cardsep.cardcount.lb
                         span="资源"
+                    div.cardsep.cardname.lb
+                        if scardInfo.status == 0
+                            span="<抓取中，请稍候>"
+                        else
+                            span=scardInfo.name
 
 
         script(type="text/javascript").
-            var cardInfo = !{ JSON.stringify(cardInfo).replace(/<\//g, "<\\/") };
+            var cardInfos = !{ JSON.stringify(cardInfos).replace(/<\//g, "<\\/") };

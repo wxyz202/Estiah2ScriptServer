@@ -1,8 +1,38 @@
-.cardcontent { width: 300px; margin-top: 20px; }
-.cardinfo,.cchead { width: 280px; margin-top:-1px; float: left; display: block; border: solid 1px; }
+@import url("icomoon.css");
+
+body { background: black; color: white; font-size:16px; }
+.cardcontent { width: 300px; margin-top: 20px; margin-left: 20px;}
+.cardinfo,.cchead { width: 280px; margin-top:-1px; float: left; display: block; border: solid 1px; border-color: white; line-height: 24px; }
+.cardinfo:hover { background: #444444; }
 .cardsep  { padding-left: 5px; float: left; display: inline; margin: 0px; }
-.lb { border-left: 1px solid; }
+.lb { border-left: 1px solid; border-color: white; }
 .cardname { width: 150px; }
 .cardid { width: 60px; }
 .cardcount { width: 40px; }
-.pop { position: absolute; width: 100px; height: 100px; border: solid 1px; margin-left: 10px; }
+.pop { position: absolute; width: auto; height: auto; border: solid 1px; margin-left: 1px; padding-right: 16px; color: white; }
+
+/* for card info */
+.cardinfo.rarity-common { color: #cbe19c; }
+.cardinfo.rarity-uncommon { color: #44ee48; }
+.cardinfo.rarity-rare { color: #7faaff; }
+.cardinfo.rarity-epic { color: #c46fff; }
+.cardinfo.rarity-class { color: #ff6125; }
+
+.pop .in1 { padding: 0 8px; }
+.pop .in2 { padding: 0 16px; }
+.pop .in3 { padding: 0 24px; }
+.pop .in4 { padding: 0 32px; }
+.pop .in5 { padding: 0 40px; }
+.pop .in6 { padding: 0 48px; }
+.pop .c3 { color: #497ea0; }
+.pop .armor { color: #f6a; }
+.pop .ward { color: #3cc; }
+.pop .melee { color: #f66; }
+.pop .magic { color: #99c; }
+.pop .sprit { color: #c96; }
+.pop .willpower { color: #f60; }
+.pop .spi { color: #ff0; }
+.pop .pow { color: #f66; }
+.pop .dex { color: #56fa76; }
+.pop .int { color: #a8caff; }
+.pop .con { color: #f90; }

@@ -143,22 +143,24 @@ exports.registerToApp = function(app){
                             allCardIds.push(card.id);
                         });
                         app.db.use(function(db){
-                            var sql = "SELECT id, status, name, fx FROM card WHERE id IN (" + allCardIds.join(",") + ")";
+                            var sql = "SELECT id, status, name, fx, rarity FROM card WHERE id IN (" + allCardIds.join(",") + ")";
                             db.query(sql, function(err, result){
                                 if (err) { throw err };
                                 db.release();
 
-                                var cardInfo = {};
+                                var cardInfos = {};
                                 result.forEach(function(record){
-                                    cardInfo[record.id] = {
+                                    cardInfos[record.id] = {
+                                        "id": record.id,
                                         "name": record.name,
                                         "fx": record.fx,
+                                        "rarity": record.rarity,
                                         "status": record.status
                                     };
                                 });
                                 app.respond(TemplateResponse("deck.jade", {
                                     deck: deck,
-                                    cardInfo: cardInfo
+                                    cardInfos: cardInfos
                                 }));
                             });
                         });
