@@ -2,14 +2,14 @@
 
 body { background: black; color: white; font-size:16px; }
 .cardcontent { width: 300px; margin-top: 20px; margin-left: 20px;}
-.cardinfo,.cchead { width: 280px; margin-top:-1px; float: left; display: block; border: solid 1px; border-color: white; line-height: 24px; }
+.cardinfo,.cchead { width: 280px; margin-top:-1px; float: left; display: block; line-height: 30px; }
 .cardinfo:hover { background: #444444; }
 .cardsep  { padding-left: 5px; float: left; display: inline; margin: 0px; }
-.lb { border-left: 1px solid; border-color: white; }
+/*.lb { border-left: 1px solid; border-color: white; }*/
 .cardname { width: 150px; }
 .cardid { width: 60px; }
 .cardcount { width: 40px; }
-.pop { position: absolute; width: auto; height: auto; border: solid 1px; margin-left: 1px; padding-right: 16px; color: white; }
+.pop { position: absolute; width: auto; height: auto; border: solid 1px; margin-left: 1px; padding-right: 16px; color: white; line-height: 24px; }
 
 /* for card info */
 .cardinfo.rarity-common { color: #cbe19c; }
