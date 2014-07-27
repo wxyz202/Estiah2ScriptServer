@@ -1,19 +1,23 @@
 window.onload = function() {
-    $(".cardinfo").hover(showpop, hidepop);
+    $(".cardinfo").hover(Pop.show, Pop.hide);
     $(".cardcontent").append("<div class='pop' id='pop' style='display:none;'></div>");
 }
-function showpop(e) {
-    var cardId = $(this).attr("data-id");
-    var p = $("#pop");
-    p.html(cardInfos[cardId].fx);
-    p.appendTo($(this));
-    var hx = this.offsetTop;
-    var hy = this.offsetLeft + this.offsetWidth;
-    p.css("top", hx);
-    p.css("left", hy);
-    p.show();
-}
-function hidepop(e) {
-    $("#pop").hide();
-}
-
+var Pop = {
+    show: function(e) {
+        var cardId = $(this).attr("data-id");
+        var p = $("#pop");
+        p.html(cardInfos[cardId].fx);
+        p.appendTo($(this));
+        var hx = e.clientX;//this.offsetTop;
+        var hy = e.clientY;//this.offsetLeft + this.offsetWidth;
+        p.css("left", hx);
+        p.css("top", hy);
+        Pop.timeoutId = window.setTimeout(function(){
+            p.show();
+        }, 500);
+    },
+    hide: function(e) {
+        window.clearTimeout(Pop.timeoutId);
+        $("#pop").hide();
+    },
+};
