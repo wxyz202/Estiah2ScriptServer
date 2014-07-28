@@ -8,13 +8,13 @@ var Pop = {
         var p = $("#pop");
         p.html(cardInfos[cardId].fx);
         p.appendTo($(this));
-        var hx = e.clientX;//this.offsetTop;
-        var hy = e.clientY;//this.offsetLeft + this.offsetWidth;
+        var hx = e.pageX;
+        var hy = e.pageY;
         p.css("left", hx);
         p.css("top", hy);
         Pop.timeoutId = window.setTimeout(function(){
             p.show();
-        }, 500);
+        }, 300);
     },
     hide: function(e) {
         window.clearTimeout(Pop.timeoutId);
