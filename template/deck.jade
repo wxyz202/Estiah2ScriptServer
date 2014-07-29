@@ -10,9 +10,9 @@ html
             div.cchead
                 div.cardsep.cardid
                     span="id"
-                div.cardsep.cardcount.lb
+                div.cardsep.cardcount
                     span="数量"
-                div.cardsep.cardname.lb
+                div.cardsep.cardname
                     span="名称"
 
             each card in deck.cards
@@ -20,9 +20,9 @@ html
                 div.cardinfo(data-id=cardInfo.id, class=(cardInfo.status == 0 ? "" : cts.RARITY.NAME[cardInfo.rarity]))
                     div.cardsep.cardid
                         span=cardInfo.id
-                    div.cardsep.cardcount.lb
+                    div.cardsep.cardcount
                         span=card.num
-                    div.cardsep.cardname.lb
+                    div.cardsep.cardname
                         if cardInfo.status == 0
                             span="<抓取中，请稍候>"
                         else
@@ -33,13 +33,25 @@ html
                 div.cardinfo(data-id=scardInfo.id, class=(scardInfo.status == 0 ? "" : cts.RARITY.NAME[scardInfo.rarity]))
                     div.cardsep.cardid
                         span=scardInfo.id
-                    div.cardsep.cardcount.lb
+                    div.cardsep.cardcount
                         span="资源"
-                    div.cardsep.cardname.lb
+                    div.cardsep.cardname
                         if scardInfo.status == 0
                             span="<抓取中，请稍候>"
                         else
                             span=scardInfo.name
+
+
+        div.gear
+            div.header
+                ="资源"
+            div.gear-card
+
+            br
+
+            div.header
+                ="技能"
+            div.gear-card
 
 
         script(type="text/javascript").

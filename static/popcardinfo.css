@@ -1,15 +1,21 @@
 @import url("icomoon.css");
 
 body { background: black; color: white; font-size:16px; }
-.cardcontent { width: 300px; margin-top: 20px; margin-left: 20px; display: table; }
-.cardinfo,.cchead { width: 280px; margin-top:-1px; display: table-row; line-height: 30px; }
+.cardcontent { float: left; width: 300px; margin-top: 20px; margin-left: 20px; display: table; }
+.cardinfo,.cchead { margin-top:-1px; display: table-row; line-height: 30px; }
 .cardinfo:hover { background: #444444; }
-.cardsep  { padding-left: 5px; display: table-cell; margin: 0px; vertical-align: middle;}
-/*.lb { border-left: 1px solid; border-color: white; }*/
-.cardname { width: 65%; }
-.cardid { width: 20%; }
-.cardcount { width: 15%; }
+.cardcontent .cardinfo, .cardcontent .cchead { width: 280px; }
+.cardsep { padding-left: 5px; display: table-cell; margin: 0px; vertical-align: middle;}
+.cardcontent .cardname { width: 65%; }
+.cardcontent .cardid { width: 20%; }
+.cardcontent .cardcount { width: 15%; }
 .pop { position: absolute; width: auto; height: auto; border: solid 1px; margin-left: 1px; padding-right: 16px; color: white; background: black; line-height: 24px; }
+.gear { float: right; width: 200px; margin-top: 20px; margin-right: 20px; border: solid 1px white; }
+.gear .header { text-align: center; }
+.gear-card { display: table; width: 100%; }
+.gear-card .cardinfo { width: 100%; }
+.gear-card .cardname { width: 80%; }
+.gear-card .cardcount { width: 20%; }
 
 /* for card info */
 .cardinfo.rarity-common { color: #cbe19c; }
