@@ -10,6 +10,8 @@ html
             div.cchead
                 div.cardsep.cardid
                     span="id"
+                div.cardsep.cardop
+                    span="操作"
                 div.cardsep.cardcount
                     span="数量"
                 div.cardsep.cardname
@@ -17,11 +19,15 @@ html
 
             each card in deck.cards
                 - var cardInfo = cardInfos[card.id];
-                div.cardinfo(data-id=cardInfo.id, class=(cardInfo.status == 0 ? "" : cts.RARITY.NAME[cardInfo.rarity]))
+                div.card.cardinfo(data-id=cardInfo.id, class=(cardInfo.status == 0 ? "" : cts.RARITY.NAME[cardInfo.rarity]))
                     div.cardsep.cardid
                         span=cardInfo.id
+                    div.cardsep.cardop
+                        span.fonticon-plus.small-fonticon
                     div.cardsep.cardcount
-                        span=card.num
+                        span.choose-num=0
+                        span="/"
+                        span.total-num=card.num
                     div.cardsep.cardname
                         if cardInfo.status == 0
                             span="<抓取中，请稍候>"
@@ -30,11 +36,15 @@ html
 
             each scard in deck.scards
                 - var scardInfo = cardInfos[scard];
-                div.cardinfo(data-id=scardInfo.id, class=(scardInfo.status == 0 ? "" : cts.RARITY.NAME[scardInfo.rarity]))
+                div.scard.cardinfo(data-id=scardInfo.id, class=(scardInfo.status == 0 ? "" : cts.RARITY.NAME[scardInfo.rarity]))
                     div.cardsep.cardid
                         span=scardInfo.id
+                    div.cardsep.cardop
+                        span.fonticon-plus.small-fonticon
                     div.cardsep.cardcount
                         span="资源"
+                        span.choose-num.e-hide=0
+                        span.total-num.e-hide=1
                     div.cardsep.cardname
                         if scardInfo.status == 0
                             span="<抓取中，请稍候>"
@@ -45,13 +55,23 @@ html
         div.gear
             div.header
                 ="资源"
-            div.gear-card
+            div.gear-card#gear-scard
 
             br
 
             div.header
                 ="技能"
-            div.gear-card
+            div.gear-card#gear-card
+
+            div.e-hide#gear-cardinfo-template
+                div.cardsep.cardop
+                    span.fonticon-plus.small-fonticon
+                    span=" "
+                    span.fonticon-minus.small-fonticon
+                div.cardsep.cardcount
+                    span.choose-num=0
+                div.cardsep.cardname
+                    span="模板"
 
 
         script(type="text/javascript").
