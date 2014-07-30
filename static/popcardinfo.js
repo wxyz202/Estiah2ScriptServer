@@ -15,7 +15,7 @@ var Pop = {
             var cardId = cardInfo.attr("data-id");
             var p = $("#pop");
             p.html(cardInfos[cardId].fx);
-            p.appendTo(cardInfo);
+            //p.appendTo(cardInfo);
             p.css("left", MouseCoordinate.x);
             p.css("top", MouseCoordinate.y);
             p.show();
@@ -109,8 +109,13 @@ var minusCardInGear = function(cardId) {
 
 $(function() {
     MouseCoordinate.init();
-    $(".cardinfo").hover(Pop.show, Pop.hide);
     $(".cardcontent").append("<div class='pop' id='pop' style='display:none;'></div>");
+    $(".cardinfo").hover(Pop.show, Pop.hide);
+    $("#pop").hover(function(){
+        $("#pop").show();
+    }, function(){
+        $("#pop").hide();
+    });
 
     $(".cardcontent .cardinfo .fonticon-plus").click(function(){
         var cardId = $(this).parents(".cardinfo").attr("data-id");
