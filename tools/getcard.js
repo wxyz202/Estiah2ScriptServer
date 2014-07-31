@@ -48,7 +48,7 @@ var getCardsInfo = function(db, cardIdList, callback){
     }, function(){
         callback();
     });
-    serial.run();
+    serial.runConcurrent();
 };
 
 var main = function(callback){

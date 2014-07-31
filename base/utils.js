@@ -30,18 +30,40 @@ var ArrayCallbackFunction = function(array, func, callback){
     self.func = func;
     self.finalCallback = callback;
 
-    self.currentIndex = 0;
-    self.callback = function(){
-        self.currentIndex++;
+    self.runSerial = function(){
+        self.currentIndex = 0;
+        self.callback = function(){
+            self.currentIndex++;
+            self.run();
+        };
+        self.run = function(){
+            if (self.currentIndex < self.array.length){
+                var currentItem = self.array[self.currentIndex];
+                self.func(currentItem, self.currentIndex);
+            } else {
+                self.finalCallback();
+            }
+        };
+
         self.run();
     };
-    self.run = function(){
-        if (self.currentIndex < self.array.length){
-            self.currentItem = self.array[self.currentIndex];
-            self.func(self.currentItem, self.currentIndex);
-        } else {
+
+    self.runConcurrent = function(){
+        self.remainCount = self.array.length;
+        if (self.remainCount == 0) {
             self.finalCallback();
         }
+        self.callback = function(){
+            self.remainCount--;
+            if (self.remainCount == 0) {
+                self.finalCallback();
+            }
+        };
+        self.run = function(){
+            self.array.forEach(self.func);
+        };
+
+        self.run();
     };
 };
 
