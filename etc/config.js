@@ -6,6 +6,7 @@ exports.config = {
         "port": 6379
     },
     "db": {
+        "connectionLimit": 100,
         "host": "localhost",
         "db": "estiah",
         "user": "estiah",

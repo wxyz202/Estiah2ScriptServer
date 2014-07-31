@@ -25,7 +25,7 @@ var randint = function(a, b){
 };
 
 var ArrayCallbackFunction = function(array, func, callback){
-    self = this;
+    var self = this;
     self.array = array;
     self.func = func;
     self.finalCallback = callback;

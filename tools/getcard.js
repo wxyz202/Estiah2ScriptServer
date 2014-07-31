@@ -7,6 +7,8 @@ global.projectHome = path.join(__dirname, "..");
 
 process.on('uncaughtException', function(err) {
     fs.appendFileSync(global.projectHome + "/logs/tools.log", "[error][" + (new Date()).toString() + "] " + err.stack + "\n");
+    console.log(err.stack);
+    process.exit(1);
 });
 
 var framework = require(global.projectHome + "/base/framework.js");
@@ -29,26 +31,51 @@ var getCardInfo = function(db, cardId, callback){
         var name = card.name;
         var fx = card.fx;
         var rarity = card.rarity.id;
+        var cost = card.cost;
+        var rune = card.rune;
         var expire_time = utils.formatDateToMysql(new Date(Date.now() + utils.randint(1000 * 60 * 60 * 24 * 6, 1000 * 60 * 60 * 24 * 8)));
-        var sql = "UPDATE card SET status = 1, expire_time = ?, content = ?, name = ?, fx = ?, rarity = ? where id = ?";
-        var params = [expire_time, body, name, fx, rarity, cardId];
-        db.query(sql, params, function(err, result){
-            if (err) { throw err; }
-            setTimeout(function(){
-                callback();
-            }, utils.randint(1000, 2000));
+        var concurrentInsertRune = new utils.ArrayCallbackFunction(cost.concat([rune]), function(runeInfo){
+            var sql = "INSERT IGNORE INTO rune (id, name, label) VALUES (?, ?, ?)";
+            var params = [runeInfo.id, runeInfo.name, runeInfo.label];
+            db.query(sql, params, function(err, result){
+                if (err) { throw err; }
+                concurrentInsertRune.callback();
+            });
+        }, function(){
+            var sql = "UPDATE card SET status = 1, expire_time = ?, content = ?, name = ?, fx = ?, rarity = ?, rune_id = ? where id = ?";
+            var params = [expire_time, body, name, fx, rarity, rune.id, cardId];
+            db.query(sql, params, function(err, result){
+                if (err) { throw err; }
+                var sql = "DELETE FROM card_cost_rune WHERE card_id = ?";
+                var params = [cardId];
+                db.query(sql, params, function(err, result){
+                    if (err) { throw err; }
+                    var concurrentInsertCost = new utils.ArrayCallbackFunction(cost, function(costRuneInfo, index){
+                        var sql = "INSERT INTO card_cost_rune (card_id, position, rune_id) VALUES (?, ?, ?)";
+                        var params = [cardId, index, costRuneInfo.id];
+                        db.query(sql, params, function(err, result){
+                            if (err) { throw err; }
+                            concurrentInsertCost.callback();
+                        });
+                    }, function(){
+                        setTimeout(function(){
+                            callback();
+                        }, utils.randint(1000, 2000));
+                    });
+                    concurrentInsertCost.runConcurrent();
+                });
+            });
         });
+        concurrentInsertRune.runConcurrent();
     });
 };
 
 var getCardsInfo = function(db, cardIdList, callback){
     console.dir(cardIdList);
     var serial = new utils.ArrayCallbackFunction(cardIdList, function(cardId){
-        getCardInfo(db, cardId, this.callback);
-    }, function(){
-        callback();
-    });
-    serial.runConcurrent();
+        getCardInfo(db, cardId, serial.callback);
+    }, callback);
+    serial.runSerial();
 };
 
 var main = function(callback){
@@ -61,7 +88,7 @@ var main = function(callback){
             if (!locked){
                 endFromdb();
             } else {
-                var endFromLockStr= function(){
+                var endFromLockStr = function(){
                     releaseCallback();
                     endFromdb();
                 };
