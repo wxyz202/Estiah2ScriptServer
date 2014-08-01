@@ -16,6 +16,8 @@ html
                     span="数量"
                 div.cardsep.cardname
                     span="名称"
+                div.cardsep.cardrune
+                    span="符文"
 
             each card in deck.cards
                 - var cardInfo = cardInfos[card.id];
@@ -33,6 +35,8 @@ html
                             span="<抓取中，请稍候>"
                         else
                             span=cardInfo.name
+                    div.cardsep.cardrune
+                        span.rune40(class=("rune40-" + cardInfo.rune_name))
 
             each scard in deck.scards
                 - var scardInfo = cardInfos[scard];
@@ -50,6 +54,8 @@ html
                             span="<抓取中，请稍候>"
                         else
                             span=scardInfo.name
+                    div.cardsep.cardrune
+                        span.rune40(class=("rune40-" + scardInfo.rune_name))
 
 
         div.gear

@@ -143,7 +143,7 @@ exports.registerToApp = function(app){
                             allCardIds.push(card.id);
                         });
                         app.db.use(function(db){
-                            var sql = "SELECT id, status, name, fx, rarity FROM card WHERE id IN (" + allCardIds.join(",") + ")";
+                            var sql = "SELECT a.id, a.status, a.name, a.fx, a.rarity, b.name as rune_name FROM card a JOIN rune b ON a.rune_id = b.id WHERE a.id IN (" + allCardIds.join(",") + ")";
                             db.query(sql, function(err, result){
                                 if (err) { throw err };
                                 db.release();
@@ -155,6 +155,7 @@ exports.registerToApp = function(app){
                                         "name": record.name,
                                         "fx": record.fx,
                                         "rarity": record.rarity,
+                                        "rune_name": record.rune_name,
                                         "status": record.status
                                     };
                                 });
