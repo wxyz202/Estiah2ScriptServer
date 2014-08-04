@@ -10,6 +10,8 @@ body { background: black; color: white; font-size:16px; }
 .cardcontent .cardinfo, .cardcontent .cchead { width: 100%; }
 .cardsep { padding-left: 5px; display: table-cell; margin: 0px; vertical-align: middle;}
 .e-transparent .cardsep { opacity: 0.4; }
+.cardinfo .cardop { text-align: center; }
+.cardinfo .cardop .cardop-space { white-space: pre; }
 .cardcontent .cardname { width: 30%; }
 .cardcontent .cardnop { width: 10%; }
 .cardcontent .cardid { width: 15%; }
@@ -20,9 +22,10 @@ body { background: black; color: white; font-size:16px; }
 .gear .header { text-align: center; }
 .gear-card { display: table; width: 100%; }
 .gear-card .cardinfo { width: 100%; }
-.gear-card .cardname { width: 50%; }
+.gear-card .cardname { width: 40%; }
 .gear-card .cardop { width: 30%; }
-.gear-card .cardcount { width: 20%; }
+.gear-card .cardcount { width: 10%; }
+.gear-card .cardrune { width: 20%; }
 .gear-card .cardinfo, .gear-card.cchead { line-height: 30px; }
 
 /* for rarity */
@@ -33,6 +36,33 @@ body { background: black; color: white; font-size:16px; }
 .cardinfo.rarity-class { color: #ff6125; }
 
 /* for rune */
+.rune20 { float: left; height: 20px !important; width: 20px !important; }
+.rune20-axe { background: url("img/rune20x20.png") repeat scroll 0 0 rgba(0, 0, 0, 0); }
+.rune20-sword { background: url("img/rune20x20.png") repeat scroll -20px 0 rgba(0, 0, 0, 0); }
+.rune20-mace { background: url("img/rune20x20.png") repeat scroll -40px 0 rgba(0, 0, 0, 0); }
+.rune20-twinblades { background: url("img/rune20x20.png") repeat scroll -60px 0 rgba(0, 0, 0, 0); }
+.rune20-spear { background: url("img/rune20x20.png") repeat scroll 0 -20px rgba(0, 0, 0, 0); }
+.rune20-fist { background: url("img/rune20x20.png") repeat scroll -20px -20px rgba(0, 0, 0, 0); }
+.rune20-earth { background: url("img/rune20x20.png") repeat scroll -40px -20px rgba(0, 0, 0, 0); }
+.rune20-shadow { background: url("img/rune20x20.png") repeat scroll -60px -20px rgba(0, 0, 0, 0); }
+.rune20-holy { background: url("img/rune20x20.png") repeat scroll 0 -40px rgba(0, 0, 0, 0); }
+.rune20-lightning { background: url("img/rune20x20.png") repeat scroll -20px -40px rgba(0, 0, 0, 0); }
+.rune20-frost { background: url("img/rune20x20.png") repeat scroll -40px -40px rgba(0, 0, 0, 0); }
+.rune20-fire { background: url("img/rune20x20.png") repeat scroll -60px -40px rgba(0, 0, 0, 0); }
+.rune20-spirit { background: url("img/rune20x20.png") repeat scroll 0 -60px rgba(0, 0, 0, 0); }
+.rune20-armor { background: url("img/rune20x20.png") repeat scroll -20px -60px rgba(0, 0, 0, 0); }
+.rune20-ward { background: url("img/rune20x20.png") repeat scroll -40px -60px rgba(0, 0, 0, 0); }
+.rune20-willpower { background: url("img/rune20x20.png") repeat scroll -60px -60px rgba(0, 0, 0, 0); }
+.rune20-summon { background: url("img/rune20x20.png") repeat scroll 0 -80px rgba(0, 0, 0, 0); }
+.rune20-buff { background: url("img/rune20x20.png") repeat scroll -20px -80px rgba(0, 0, 0, 0); }
+.rune20-debuff { background: url("img/rune20x20.png") repeat scroll -40px -80px rgba(0, 0, 0, 0); }
+.rune20-tech { background: url("img/rune20x20.png") repeat scroll -60px -80px rgba(0, 0, 0, 0); }
+.rune20-red { background: url("img/rune20x20.png") repeat scroll -80px 0 rgba(0, 0, 0, 0); }
+.rune20-blue { background: url("img/rune20x20.png") repeat scroll -80px -20px rgba(0, 0, 0, 0); }
+.rune20-yellow { background: url("img/rune20x20.png") repeat scroll -80px -40px rgba(0, 0, 0, 0); }
+.rune20-green { background: url("img/rune20x20.png") repeat scroll -80px -60px rgba(0, 0, 0, 0); }
+.rune20-white { background: url("img/rune20x20.png") repeat scroll -80px -80px rgba(0, 0, 0, 0); }
+
 .rune40 { float: left; height: 40px !important; width: 40px !important; }
 .rune40-axe { background: url("img/rune40x40.png") repeat scroll 0 0 rgba(0, 0, 0, 0); }
 .rune40-sword { background: url("img/rune40x40.png") repeat scroll -40px 0 rgba(0, 0, 0, 0); }

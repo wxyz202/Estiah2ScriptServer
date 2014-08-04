@@ -59,6 +59,7 @@ var plusCardInGear = function(cardId) {
         gearCardInfo.removeClass("e-hide");
         gearCardInfo.addClass("cardinfo");
         gearCardInfo.attr("data-id", cardId);
+        gearCardInfo.find(".rune20").addClass("rune20-" + cardInfos[cardId].rune_name);
         gearCardInfo.find(".cardname span").text(cardInfo.find(".cardname span").text());
         ["rarity-common", "rarity-uncommon", "rarity-rare", "rarity-epic", "rarity-class"].forEach(function(cls){
             if (cardInfo.hasClass(cls)){
