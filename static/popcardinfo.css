@@ -12,12 +12,13 @@ body { background: black; color: white; font-size:16px; }
 .e-transparent .cardsep { opacity: 0.4; }
 .cardinfo .cardop { text-align: center; }
 .cardinfo .cardop .cardop-space { white-space: pre; }
-.cardcontent .cardname { width: 32%; }
-.cardcontent .cardnop { width: 8%; }
+.cardcontent .cardname { width: 24%; }
+.cardcontent .cardop { width: 8%; }
 .cardcontent .cardid { width: 10%; }
 .cardcontent .cardcount { width: 10%; }
 .cardcontent .cardrune { width: 10%; }
 .cardcontent .cardcost { width: 30%; }
+.cardcontent .carddelay { width: 8%; }
 .pop { position: absolute; width: auto; height: auto; border: solid 1px; margin-left: 1px; padding-right: 16px; color: white; background: black; line-height: 24px; z-index: 1000; white-space: nowrap; }
 .gear { float: right; width: 200px; margin-top: 20px; margin-right: 80px; border: solid 1px white; }
 .gear .header { text-align: center; }

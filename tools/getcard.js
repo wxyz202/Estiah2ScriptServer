@@ -33,6 +33,7 @@ var getCardInfo = function(db, cardId, callback){
         var rarity = card.rarity.id;
         var cost = card.cost;
         var rune = card.rune;
+        var delay = card.delay;
         var expire_time = utils.formatDateToMysql(new Date(Date.now() + utils.randint(1000 * 60 * 60 * 24 * 6, 1000 * 60 * 60 * 24 * 8)));
         var concurrentInsertRune = new utils.ArrayCallbackFunction(cost.concat([rune]), function(runeInfo){
             var sql = "INSERT IGNORE INTO rune (id, name, label) VALUES (?, ?, ?)";
@@ -42,8 +43,8 @@ var getCardInfo = function(db, cardId, callback){
                 concurrentInsertRune.callback();
             });
         }, function(){
-            var sql = "UPDATE card SET status = 1, expire_time = ?, content = ?, name = ?, fx = ?, rarity = ?, rune_id = ? where id = ?";
-            var params = [expire_time, body, name, fx, rarity, rune.id, cardId];
+            var sql = "UPDATE card SET status = 1, expire_time = ?, content = ?, name = ?, fx = ?, rarity = ?, rune_id = ?, delay = ? where id = ?";
+            var params = [expire_time, body, name, fx, rarity, rune.id, delay, cardId];
             db.query(sql, params, function(err, result){
                 if (err) { throw err; }
                 var sql = "DELETE FROM card_cost_rune WHERE card_id = ?";

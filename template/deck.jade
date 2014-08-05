@@ -20,6 +20,8 @@ html
                     span="符文"
                 div.cardsep.cardcost
                     span="成本"
+                div.cardsep.cardcost
+                    span="延迟"
 
             each card in deck.cards
                 - var cardInfo = cardInfos[card.id];
@@ -42,6 +44,8 @@ html
                     div.cardsep.cardcost
                         each rune_name in cardInfo.cost
                             span.rune40(class=("rune40-" + rune_name))
+                    div.cardsep.carddelay
+                        span=cardInfo.delay
 
             each scard in deck.scards
                 - var scardInfo = cardInfos[scard];
@@ -63,6 +67,8 @@ html
                         span.rune40(class=("rune40-" + scardInfo.rune_name))
                     div.cardsep.cardcost
                         span="-"
+                    div.cardsep.carddelay
+                        span=scardInfo.delay
 
 
         div.gear

@@ -144,7 +144,7 @@ exports.registerToApp = function(app){
                             allCardIds.push(card.id);
                         });
                         app.db.use(function(db){
-                            var sql = "SELECT a.id, a.status, a.name, a.fx, a.rarity, b.name as rune_name FROM card a JOIN rune b ON a.rune_id = b.id WHERE a.id IN (" + allCardIds.join(",") + ")";
+                            var sql = "SELECT a.id, a.status, a.name, a.fx, a.rarity, b.name as rune_name, a.delay FROM card a JOIN rune b ON a.rune_id = b.id WHERE a.id IN (" + allCardIds.join(",") + ")";
                             db.query(sql, function(err, result){
                                 if (err) { throw err };
                                 var sql = "SELECT a.card_id, a.position, b.name AS rune_name FROM card_cost_rune a JOIN rune b ON a.rune_id = b.id WHERE a.card_id IN (" + allCardIds.join(",") + ")";
@@ -169,6 +169,7 @@ exports.registerToApp = function(app){
                                             "rarity": record.rarity,
                                             "rune_name": record.rune_name,
                                             "cost": costDict[record.id],
+                                            "delay": record.delay,
                                             "status": record.status
                                         };
                                     });
