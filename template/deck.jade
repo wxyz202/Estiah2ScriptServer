@@ -18,6 +18,8 @@ html
                     span="名称"
                 div.cardsep.cardrune
                     span="符文"
+                div.cardsep.cardcost
+                    span="成本"
 
             each card in deck.cards
                 - var cardInfo = cardInfos[card.id];
@@ -37,6 +39,9 @@ html
                             span=cardInfo.name
                     div.cardsep.cardrune
                         span.rune40(class=("rune40-" + cardInfo.rune_name))
+                    div.cardsep.cardcost
+                        each rune_name in cardInfo.cost
+                            span.rune40(class=("rune40-" + rune_name))
 
             each scard in deck.scards
                 - var scardInfo = cardInfos[scard];
@@ -56,6 +61,8 @@ html
                             span=scardInfo.name
                     div.cardsep.cardrune
                         span.rune40(class=("rune40-" + scardInfo.rune_name))
+                    div.cardsep.cardcost
+                        span="-"
 
 
         div.gear

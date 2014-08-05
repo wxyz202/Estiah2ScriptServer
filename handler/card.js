@@ -2,6 +2,7 @@ var crypto = require("crypto");
 var child_process = require("child_process");
 
 var cts = require(global.projectHome + "/base/constants.js");
+var utils = require(global.projectHome + "/base/utils.js");
 var framework = require(global.projectHome + "/base/framework.js");
 var TemplateResponse = framework.TemplateResponse;
 var JsonResponse = framework.JsonResponse;
@@ -146,23 +147,36 @@ exports.registerToApp = function(app){
                             var sql = "SELECT a.id, a.status, a.name, a.fx, a.rarity, b.name as rune_name FROM card a JOIN rune b ON a.rune_id = b.id WHERE a.id IN (" + allCardIds.join(",") + ")";
                             db.query(sql, function(err, result){
                                 if (err) { throw err };
-                                db.release();
+                                var sql = "SELECT a.card_id, a.position, b.name AS rune_name FROM card_cost_rune a JOIN rune b ON a.rune_id = b.id WHERE a.card_id IN (" + allCardIds.join(",") + ")";
+                                db.query(sql, function(err, costResult){
+                                    if (err) { throw err };
+                                    db.release();
 
-                                var cardInfos = {};
-                                result.forEach(function(record){
-                                    cardInfos[record.id] = {
-                                        "id": record.id,
-                                        "name": record.name,
-                                        "fx": record.fx,
-                                        "rarity": record.rarity,
-                                        "rune_name": record.rune_name,
-                                        "status": record.status
-                                    };
+                                    var costDict = {};
+                                    costResult.forEach(function(record){
+                                        if (costDict[record.card_id] === undefined) {
+                                            costDict[record.card_id] = [];
+                                        }
+                                        costDict[record.card_id][record.position] = record.rune_name;
+                                    });
+
+                                    var cardInfos = {};
+                                    result.forEach(function(record){
+                                        cardInfos[record.id] = {
+                                            "id": record.id,
+                                            "name": record.name,
+                                            "fx": record.fx,
+                                            "rarity": record.rarity,
+                                            "rune_name": record.rune_name,
+                                            "cost": costDict[record.id],
+                                            "status": record.status
+                                        };
+                                    });
+                                    app.respond(TemplateResponse("deck.jade", {
+                                        deck: deck,
+                                        cardInfos: cardInfos
+                                    }));
                                 });
-                                app.respond(TemplateResponse("deck.jade", {
-                                    deck: deck,
-                                    cardInfos: cardInfos
-                                }));
                             });
                         });
                     } else {

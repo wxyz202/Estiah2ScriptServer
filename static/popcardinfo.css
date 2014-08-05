@@ -12,11 +12,12 @@ body { background: black; color: white; font-size:16px; }
 .e-transparent .cardsep { opacity: 0.4; }
 .cardinfo .cardop { text-align: center; }
 .cardinfo .cardop .cardop-space { white-space: pre; }
-.cardcontent .cardname { width: 30%; }
-.cardcontent .cardnop { width: 10%; }
-.cardcontent .cardid { width: 15%; }
-.cardcontent .cardcount { width: 15%; }
-.cardcontent .cardrune { width: 30%; }
+.cardcontent .cardname { width: 32%; }
+.cardcontent .cardnop { width: 8%; }
+.cardcontent .cardid { width: 10%; }
+.cardcontent .cardcount { width: 10%; }
+.cardcontent .cardrune { width: 10%; }
+.cardcontent .cardcost { width: 30%; }
 .pop { position: absolute; width: auto; height: auto; border: solid 1px; margin-left: 1px; padding-right: 16px; color: white; background: black; line-height: 24px; z-index: 1000; white-space: nowrap; }
 .gear { float: right; width: 200px; margin-top: 20px; margin-right: 80px; border: solid 1px white; }
 .gear .header { text-align: center; }
@@ -59,9 +60,9 @@ body { background: black; color: white; font-size:16px; }
 .rune20-tech { background: url("img/rune20x20.png") repeat scroll -60px -80px rgba(0, 0, 0, 0); }
 .rune20-red { background: url("img/rune20x20.png") repeat scroll -80px 0 rgba(0, 0, 0, 0); }
 .rune20-blue { background: url("img/rune20x20.png") repeat scroll -80px -20px rgba(0, 0, 0, 0); }
-.rune20-yellow { background: url("img/rune20x20.png") repeat scroll -80px -40px rgba(0, 0, 0, 0); }
-.rune20-green { background: url("img/rune20x20.png") repeat scroll -80px -60px rgba(0, 0, 0, 0); }
-.rune20-white { background: url("img/rune20x20.png") repeat scroll -80px -80px rgba(0, 0, 0, 0); }
+.rune20-white { background: url("img/rune20x20.png") repeat scroll -80px -40px rgba(0, 0, 0, 0); }
+.rune20-yellow { background: url("img/rune20x20.png") repeat scroll -80px -60px rgba(0, 0, 0, 0); }
+.rune20-green { background: url("img/rune20x20.png") repeat scroll -80px -80px rgba(0, 0, 0, 0); }
 
 .rune40 { float: left; height: 40px !important; width: 40px !important; }
 .rune40-axe { background: url("img/rune40x40.png") repeat scroll 0 0 rgba(0, 0, 0, 0); }
@@ -86,9 +87,9 @@ body { background: black; color: white; font-size:16px; }
 .rune40-tech { background: url("img/rune40x40.png") repeat scroll -120px -160px rgba(0, 0, 0, 0); }
 .rune40-red { background: url("img/rune40x40.png") repeat scroll -160px 0 rgba(0, 0, 0, 0); }
 .rune40-blue { background: url("img/rune40x40.png") repeat scroll -160px -40px rgba(0, 0, 0, 0); }
-.rune40-yellow { background: url("img/rune40x40.png") repeat scroll -160px -80px rgba(0, 0, 0, 0); }
-.rune40-green { background: url("img/rune40x40.png") repeat scroll -160px -120px rgba(0, 0, 0, 0); }
-.rune40-white { background: url("img/rune40x40.png") repeat scroll -160px -160px rgba(0, 0, 0, 0); }
+.rune40-white { background: url("img/rune40x40.png") repeat scroll -160px -80px rgba(0, 0, 0, 0); }
+.rune40-yellow { background: url("img/rune40x40.png") repeat scroll -160px -120px rgba(0, 0, 0, 0); }
+.rune40-green { background: url("img/rune40x40.png") repeat scroll -160px -160px rgba(0, 0, 0, 0); }
 
 .pop .in1 { padding: 0 8px; }
 .pop .in2 { padding: 0 16px; }
